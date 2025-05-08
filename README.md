@@ -1,5 +1,24 @@
 # Django E-commerce
 
+## Project Overview
+Django E-commerce is a full-featured online shopping platform built with Django. It allows users to browse products, manage their shopping cart, place orders, and provides an admin dashboard for managing products, categories, and orders. The project is designed to be easily customizable and extendable for various business needs.
+
+### Key Features
+- User registration, login, and profile management
+- Product catalog with categories and search
+- Shopping cart functionality
+- Order placement and order history
+- Admin dashboard for managing products, categories, and orders
+- Responsive design for desktop and mobile
+
+### Tech Stack
+- Django (Python web framework)
+- SQLite (default, can be replaced with PostgreSQL/MySQL)
+- HTML, CSS, JavaScript (for frontend)
+- Bootstrap (for UI styling)
+
+---
+
 مشروع تجارة إلكترونية مبني بإطار عمل Django.
 
 ## المتطلبات
@@ -28,7 +47,3 @@
    ```bash
    python manage.py runserver
    ```
-
-## ملاحظات
-- تأكد من عدم رفع ملفات البيئة الافتراضية أو الملفات الحساسة إلى GitHub.
-- عدّل الإعدادات حسب الحاجة في settings.py.
