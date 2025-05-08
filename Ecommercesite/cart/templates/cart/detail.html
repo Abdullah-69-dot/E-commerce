@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{%block title%} My Cart {%endblock%}
+
+{%block content%}
+{%if cart %}
+<ul class="space-y-4">
+    {%for item in cart.items.all %}
+    <li class="flex items-center p-4">
+        {%if item.product.image%}
+        <img src="{{item.product.image.url}}" alt={{item.product.name}} class="w-24 mr-4">
+        {%endif%}
+        <div class="flex-grow">
+            <a href="{%url 'products:product_detail' item.product.id item.product.slug%}">
+        <h3 class="font-semibold text-lg">{{item.product.name}}</h3>
+            </a>
+        <p class="text-gray-700">{{item.product.description}}</p>
+        <p class="text-indigo-600">${{item.product.price}}</p>
+        <p class="text-gray-600">Quantity: {{item.quantity}}</p>
+        <div class="flex-shrink">
+            <form action="{% url 'cart:remove_item' item.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" 
+                style="background-color: #dc2626; color: white; font-weight: bold; padding: 8px 12px; border-radius: 4px; border: none; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); cursor: pointer; transition: all 0.03s ease-in-out;"
+                onmouseover="this.style.borderRadius='9999px'; this.style.backgroundColor='#b91c1c'" 
+                onmouseout="this.style.borderRadius='4px'; this.style.backgroundColor='#dc2626'">
+                ✖
+            </button>
+            
+            </form>
+        </div>
+    </li>
+    {%endfor%}
+{%else%}
+<P>Cart is empty</P>
+{%endif%}
+{%if cart.get_total_price %}
+<p><strong>Total price :{{cart.get_total_price}}$</p>
+{%endif%}
+{%if cart%}
+
+<form action="{% url 'orders:order_create'%}" method="post">
+    {%csrf_token%}
+    <button type="submit" 
+    style="width: 100%; background-color: #4f46e5; color: white; font-weight: 500; padding: 5px 14px; 
+    border-radius: 8px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border: none; 
+    cursor: pointer; transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;"
+    onmouseover="this.style.backgroundColor='#4338ca'; this.style.transform='scale(1.05)'" 
+    onmouseout="this.style.backgroundColor='#4f46e5'; this.style.transform='scale(1)'">
+    Proceed to Checkout
+    </button>
+
+</form>
+{%endif%}
+
+</ul>
+
+{%endblock%}

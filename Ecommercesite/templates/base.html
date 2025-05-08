@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{%block title%}E-commerce{%endblock%}</title>
+    <!-- ملف CSS من Tailwind -->
+    <link href="{% static 'dist/styles.css' %}" rel="stylesheet">
+
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="shadow-md">{% include "includes/nav.html" %}</header>
+    {%block detail%} {%endblock%}
+
+    <!-- Main Content with Sidebar -->
+    <main class="max-w-6xl mx-auto py-10 px-4 flex">
+        <!-- Sidebar -->
+            {%block aside%} {%endblock%}
+
+        <!-- Product Grid -->
+        <section class="w-3/4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-6">
+            {%block content%} {%endblock%}
+
+        </section>
+    </main>
+</body>
+</html>

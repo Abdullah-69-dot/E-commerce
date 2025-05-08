@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %} Order Confirmation {% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">✅ Your order has been placed!</h2>
+    <h3 class="text-lg font-semibold text-gray-600">Order ID: #{{ order.id }}</h3>
+    
+    <ul class="mt-4 space-y-3">
+        {% for item in order.items.all %}
+        <li class="flex justify-between border-b pb-2">
+            <span class="font-medium">{{ item.quantity }} × {{ item.product.name }}</span>
+            <span class="text-green-600 font-semibold">${{ item.price }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="mt-6 flex justify-between items-center border-t pt-4">
+        <span class="text-xl font-bold text-gray-800">Total:</span>
+        <span class="text-2xl font-bold text-green-600">${{ order.get_total_cost}}</span>
+    </div>
+
+    <a href="{% url 'products:product_list' %}" class="mt-6 block text-center bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">
+        Continue Shopping 🛍️
+    </a>
+</div>
+{% endblock %}

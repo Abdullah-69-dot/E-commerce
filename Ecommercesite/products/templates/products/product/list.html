@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}My site{% endblock %}
+
+{% block aside %}
+<aside class="w-1/4 bg-white p-4 rounded-lg shadow">
+    <h2 class="text-xl font-bold mb-4">Categories</h2>
+    <input type="text" id="categorySearchInput" placeholder="Search Categories..." class="w-full p-2 border rounded-lg mb-4">
+    <ul class="space-y-2" id="categoryList">
+        {% for c in categories %}
+        <li><a href="{% url 'products:product_list_by_category' c.slug %}" class="block p-2 bg-gray-200 rounded hover:bg-gray-300">{{ c.name }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endblock %}
+
+{% block content %}
+<!-- عرض المنتجات -->
+{% for pr in products %}
+<a href="{% url 'products:product_detail' pr.id pr.slug %}">
+<div class="bg-white p-4 rounded-lg shadow">
+    {% if pr.image %}
+        <img src="{{ pr.image.url }}" alt="{{ pr.name }}" class="w-full h-30 object-cover rounded">
+    {% else %}
+        <img src="https://via.placeholder.com/150" alt="No Image" class="w-full h-40 object-cover rounded">
+    {% endif %}
+    <h2 class="text-lg font-bold mt-2">{{ pr.name }}</h2>
+    <p class="text-gray-600">${{ pr.price }}</p>
+    <p class="text-gray-600">{{ pr.description }}</p>
+</div>
+</a>
+{% endfor %}
+
+<!-- الشات بوت -->
+<div class="fixed bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg w-80 h-96 overflow-auto">
+    <h3 class="text-xl font-bold mb-2">Chat with us</h3>
+    <div id="chatBox" class="h-72 overflow-y-scroll mb-4 p-2 bg-gray-100 rounded">
+        <!-- سيتم إضافة المحادثات هنا -->
+    </div>
+    <input type="text" id="userMessage" class="w-full p-2 border rounded" placeholder="أكتب رسالتك...">
+    <button onclick="sendMessage()" class="w-full bg-blue-600 hover:bg-blue-800 text-white p-2 rounded mt-2">إرسال</button>
+</div>
+
+<script>
+    async function sendMessage() {
+        const input = document.getElementById('userMessage');
+        const message = input.value.trim();
+        const chatBox = document.getElementById('chatBox');
+        
+        if (!message) return;
+        
+        // إضافة رسالة المستخدم
+        chatBox.innerHTML += `
+            <div class="flex justify-end">
+                <div class="bg-blue-100 p-3 rounded-lg max-w-[80%]">
+                    ${message}
+                </div>
+            </div>
+        `;
+        
+        input.value = '';
+        
+        try {
+            const response = await fetch("{% url 'products:chatbot' %}?message=" + encodeURIComponent(message));
+            const data = await response.json();
+            
+            // إضافة رد البوت
+            chatBox.innerHTML += `
+                <div class="flex justify-start">
+                    <div class="bg-gray-100 p-3 rounded-lg max-w-[80%]">
+                        ${data.reply.replace(/\n/g, '<br>')}
+                    </div>
+                </div>
+            `;
+            
+        } catch (error) {
+            chatBox.innerHTML += `
+                <div class="text-red-500 p-2">
+                    حدث خطأ في الاتصال
+                </div>
+            `;
+        }
+        
+        // التمرير لآخر رسالة
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    </script>
+{% endblock %}
